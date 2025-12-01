@@ -1,7 +1,11 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Scalar.AspNetCore;
 using Server;
+using Server.Mapping;
+using Server.Repositories;
+using Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,10 +13,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddDbContext<StudyBiddyDbContext>(Options =>
 {
     Options.UseSqlServer(builder.Configuration.GetConnectionString("defaultConnection"));
 });
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+builder.Services.AddScoped<IUserRepo, UserRepo>();
+builder.Services.AddScoped<IUserService, UserService>();
+
 
 var app = builder.Build();
 

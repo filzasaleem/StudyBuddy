@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Server.DTOs;
 
 namespace Server.Controllers
 {
@@ -16,6 +17,9 @@ namespace Server.Controllers
             return Ok();
         }
         [HttpPost]
-        public async Task<ActionResult<UserResponse>> AddUser()
+        public async Task<ActionResult<UserResponse>> AddUser(UserRequest request)
+        {
+            return Ok();
+        }
     }
 }
