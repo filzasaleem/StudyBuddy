@@ -30,9 +30,12 @@ namespace Server.Services
             return _mapper.Map<UserResponse>(newUser);
         }
 
-        public Task<List<UserResponse>> GetUsers()
+        public async Task<User> ValidateUser(LoginRequest request)
         {
-            throw new NotImplementedException();
+            var user =
+                await _repo.ValidateUserAsync(request.Email, request.Password)
+                ?? throw new Exception("Error occured");
+            return user;
         }
     }
 }

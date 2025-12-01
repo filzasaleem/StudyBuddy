@@ -13,7 +13,7 @@ namespace Server.Repositories
         private readonly StudyBiddyDbContext _context;
         private readonly IPasswordHasher<User> _passwordHasher;
 
-        public UserRepo(StudyBiddyDbContext context,IPasswordHasher<User> passwordHasher)
+        public UserRepo(StudyBiddyDbContext context, IPasswordHasher<User> passwordHasher)
         {
             _context = context;
             _passwordHasher = passwordHasher;
@@ -38,9 +38,19 @@ namespace Server.Repositories
             return newUser;
         }
 
-        public async Task<List<User>> GetUserAsync()
+        public async Task<User> ValidateUserAsync(string email, string password)
         {
-            return await _context.Users.ToListAsync();
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+
+            if (user == null)
+                return null;
+
+            var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password);
+
+            if (result == PasswordVerificationResult.Failed)
+                return null;
+
+            return user;
         }
     }
 }

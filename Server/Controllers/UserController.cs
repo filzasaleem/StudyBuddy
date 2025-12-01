@@ -11,15 +11,6 @@ namespace Server.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        [HttpGet]
-        public async Task<ActionResult<UserResponse>> GetUsers()
-        {
-            return Ok();
-        }
-        [HttpPost]
-        public async Task<ActionResult<UserResponse>> AddUser(UserRequest request)
-        {
-            return Ok();
-        }
+        
     }
 }

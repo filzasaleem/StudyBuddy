@@ -21,6 +21,7 @@ builder.Services.AddDbContext<StudyBiddyDbContext>(Options =>
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IJwtTokenService,>();
 
 
 var app = builder.Build();

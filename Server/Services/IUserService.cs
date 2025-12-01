@@ -8,7 +8,7 @@ namespace Server.Services
 {
     public interface IUserService
     {
-        public Task<List<UserResponse>> GetUsers();
         public Task<UserResponse> AddUser(UserRequest user);
+        public Task<User> ValidateUser(LoginRequest request);
     }
 }
