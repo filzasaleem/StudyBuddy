@@ -28,7 +28,7 @@ namespace Server.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("login")]
+        [HttpPost("login")]
         public async Task<ActionResult<AuthResponse>> LogIn(LoginRequest request)
         {
             try

@@ -1,9 +1,14 @@
 import { createRootRoute, Link, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
+import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react'
+
 
 export const Route = createRootRoute({
   component: () => (
     <>
+    <SignedOut>
+          <SignInButton />
+      </SignedOut>
       <div className="p-2 flex gap-2">
         <Link to="/" className="[&.active]:font-bold">
           Home

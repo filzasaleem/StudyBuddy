@@ -1,8 +1,9 @@
 using Server;
 
-namespace Server.Services;
-
-public interface IJwtTokenService
+namespace Server.Services
 {
-    string GenerateToken(User user);
+    public interface IJwtTokenService
+    {
+        string GenerateToken(User user);
+    }
 }
