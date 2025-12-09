@@ -45,5 +45,6 @@ namespace Server.Controllers
         {
             return Ok("Authorized OK!");
         }
+       
     }
 }

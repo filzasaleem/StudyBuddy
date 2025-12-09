@@ -13,6 +13,11 @@ using Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
+builder.Services.AddDbContext<StudyBiddyDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(
@@ -31,7 +36,6 @@ builder.Services.AddCors(options =>
     );
 });
 
-
 // 1. Add Clerk authentication
 
 builder.Services.AddClerkApiClient(config =>
@@ -47,14 +51,11 @@ builder
         options.Authority = builder.Configuration["Clerk:Domain"];
         options.AuthorizedParty = builder.Configuration["Clerk:Audience"];
     });
+
 // Add services
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
-builder.Services.AddDbContext<StudyBiddyDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
 
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
@@ -71,6 +72,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
+
 // Authentication + Authorization **MUST** be added
 app.UseAuthentication();
 app.UseAuthorization();
