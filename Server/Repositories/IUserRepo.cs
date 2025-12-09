@@ -9,12 +9,7 @@ namespace Server.Repositories
 {
     public interface IUserRepo
     {
-        public Task<User> ValidateUserAsync(string email, string password);
-        public Task<User> CreateUserAsync(
-            string firstName,
-            string lastName,
-            string email,
-            string password
-        );
+        public Task<User?> GetUserByClerkIdAsync(string clerkUserId);
+        public Task<User> CreateUserAsync(User user);
     }
 }

@@ -19,23 +19,28 @@ namespace Server.Services
             _mapper = mapper;
         }
 
-        public async Task<UserResponse> AddUser(UserRequest user)
+        public async Task<UserResponse> GetOrCreateUserAsync(
+            string clerkUserId,
+            string email,
+            string firstName,
+            string lastName
+        )
         {
-            var newUser = await _repo.CreateUserAsync(
-                user.FirstName,
-                user.LastName,
-                user.Email,
-                user.Password
-            );
-            return _mapper.Map<UserResponse>(newUser);
+            var user = await _repo.GetUserByClerkIdAsync(clerkUserId);
+            if (user == null)
+            {
+                user = await _repo.CreateUserAsync(
+                    new User
+                    {
+                        ClerkUserId = clerkUserId,
+                        Email = email,
+                        FirstName = firstName,
+                        LastName = lastName,
+                    }
+                );
+            }
+            return _mapper.Map<UserResponse>(user);
         }
 
-        public async Task<User> ValidateUser(LoginRequest request)
-        {
-            var user =
-                await _repo.ValidateUserAsync(request.Email, request.Password)
-                ?? throw new Exception("Error occured");
-            return user;
-        }
     }
 }

@@ -12,7 +12,6 @@ namespace Server.Mapping
         public MappingProfile()
         {
             CreateMap<User, UserResponse>();
-             CreateMap<UserRequest, User>();
         }
     }
 }

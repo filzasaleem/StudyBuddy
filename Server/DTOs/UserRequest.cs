@@ -8,5 +8,5 @@ public record UserRequest(
     [Required]
     [RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", ErrorMessage = "Invalid email address")]
         string Email,
-    [Required] [MaxLength(50)] [MinLength(5)] string Password
+    [Required] string ClerkUserId
 );

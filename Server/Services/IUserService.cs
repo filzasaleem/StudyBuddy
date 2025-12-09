@@ -8,7 +8,11 @@ namespace Server.Services
 {
     public interface IUserService
     {
-        public Task<UserResponse> AddUser(UserRequest user);
-        public Task<User> ValidateUser(LoginRequest request);
+        public Task<UserResponse> GetOrCreateUserAsync(
+            string clerkUserId,
+            string email,
+            string firstName,
+            string lastName
+        );
     }
 }
