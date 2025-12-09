@@ -38,5 +38,12 @@ namespace Server.Controllers
             );
             return Ok(user);
         }
+
+        [Authorize]
+        [HttpGet("test")]
+        public IActionResult Test()
+        {
+            return Ok("Authorized OK!");
+        }
     }
 }

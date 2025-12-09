@@ -12,11 +12,25 @@ using Server.Repositories;
 using Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services
 builder.Services.AddOpenApi();
-builder.Services.AddControllers();
-builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        "AllowFrontend",
+        policy =>
+        {
+            policy
+                .WithOrigins(
+                    "http://localhost:5173", // Vite frontend
+                    "http://localhost:3000" // Any other local frontend
+                )
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials(); // Needed for Clerk
+        }
+    );
+});
+
 
 // 1. Add Clerk authentication
 
@@ -30,9 +44,12 @@ builder
     .Services.AddAuthentication(ClerkAuthenticationDefaults.AuthenticationScheme)
     .AddClerkAuthentication(options =>
     {
-        options.Authority = builder.Configuration["Clerk:Domain"]; 
-        options.AuthorizedParty = builder.Configuration["Clerk:Audience"]; 
+        options.Authority = builder.Configuration["Clerk:Domain"];
+        options.AuthorizedParty = builder.Configuration["Clerk:Audience"];
     });
+// Add services
+builder.Services.AddControllers();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddDbContext<StudyBiddyDbContext>(options =>
 {
@@ -53,7 +70,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("AllowFrontend");
 // Authentication + Authorization **MUST** be added
 app.UseAuthentication();
 app.UseAuthorization();
