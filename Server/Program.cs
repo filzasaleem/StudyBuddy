@@ -15,7 +15,7 @@ using Servr.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
-builder.Services.AddDbContext<StudyBiddyDbContext>(options =>
+builder.Services.AddDbContext<StudyBuddyDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
@@ -83,6 +83,8 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IEventRepo, EventRepo>();
+builder.Services.AddScoped<IEventService, EventService>();
 
 builder.Services.AddAuthorization();
 

@@ -1,6 +1,6 @@
 namespace Server.DTOs;
 
-public class EventCreateDto(
+public record EventCreateDto(
     string Title,
     string? Description,
     DateTimeOffset Start,
