@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Server.Data;
 using Server.DTOs;
+using Servr.Models;
 
 namespace Server.Repositories
 {

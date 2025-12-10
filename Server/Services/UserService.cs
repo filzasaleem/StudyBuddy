@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Server.DTOs;
 using Server.Repositories;
+using Servr.Models;
 
 namespace Server.Services
 {

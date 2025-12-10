@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Servr.Models;
 
-namespace Server;
+namespace Server.Data;
 
 public class StudyBiddyDbContext : DbContext
 {

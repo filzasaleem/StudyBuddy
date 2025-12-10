@@ -7,9 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using Server;
+using Server.Data;
 using Server.Mapping;
 using Server.Repositories;
 using Server.Services;
+using Servr.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
