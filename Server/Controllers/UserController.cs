@@ -39,8 +39,8 @@ namespace Server.Controllers
             Console.WriteLine("Last Name is: " + lastName);
             Console.WriteLine("****************");
 
-            // if (clerkUserId == null || email == null)
-            //     return Unauthorized();
+            if (clerkUserId == null )
+                return Unauthorized();
             UserResponse user = await _services.GetOrCreateUserAsync(
                 clerkUserId,
                 email,

@@ -1,4 +1,4 @@
-﻿namespace Server;
+﻿namespace Servr.Models;
 
 public class User
 {
@@ -8,4 +8,5 @@ public class User
     public string? LastName { get; set; }
     public string? Email { get; set; }
     public DateTime CreatedAt { get; set; }
+    public List<Event> Events { get; set; } = new();
 }
