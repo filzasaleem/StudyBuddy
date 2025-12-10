@@ -21,12 +21,14 @@ namespace Server.Services
 
         public async Task<UserResponse> GetOrCreateUserAsync(
             string clerkUserId,
-            string email,
-            string firstName,
-            string lastName
+            string? email,
+            string? firstName,
+            string? lastName
         )
         {
             var user = await _repo.GetUserByClerkIdAsync(clerkUserId);
+            Console.WriteLine("__________INSIDE THE USER SERVICE__________");
+            Console.WriteLine("_____user: " + user);
             if (user == null)
             {
                 user = await _repo.CreateUserAsync(

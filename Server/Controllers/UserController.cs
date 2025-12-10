@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,18 +25,30 @@ namespace Server.Controllers
         [Authorize]
         public async Task<IActionResult> GetCurrentUser()
         {
-            var clerkUserId = User.FindFirst("sub")?.Value;
+            Console.WriteLine("*************Inside Controller********");
+            var clerkUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var email = User.FindFirst("email")?.Value;
             var firstName = User.FindFirst("firstName")?.Value;
             var lastName = User.FindFirst("lastName")?.Value;
-            if (clerkUserId == null || email == null)
-                return Unauthorized();
+            Console.WriteLine("clerk id is: " + clerkUserId);
+            Console.WriteLine("****************");
+            Console.WriteLine("Email is: " + email);
+            Console.WriteLine("****************");
+            Console.WriteLine("FirstName is: " + firstName);
+            Console.WriteLine("****************");
+            Console.WriteLine("Last Name is: " + lastName);
+            Console.WriteLine("****************");
+
+            // if (clerkUserId == null || email == null)
+            //     return Unauthorized();
             UserResponse user = await _services.GetOrCreateUserAsync(
                 clerkUserId,
                 email,
                 firstName,
                 lastName
             );
+            Console.WriteLine("***********************USER***************");
+            Console.WriteLine(user);
             return Ok(user);
         }
 
@@ -45,6 +58,5 @@ namespace Server.Controllers
         {
             return Ok("Authorized OK!");
         }
-       
     }
 }

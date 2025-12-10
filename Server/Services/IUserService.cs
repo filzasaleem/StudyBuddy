@@ -10,9 +10,9 @@ namespace Server.Services
     {
         public Task<UserResponse> GetOrCreateUserAsync(
             string clerkUserId,
-            string email,
-            string firstName,
-            string lastName
+            string? email,
+            string? firstName,
+            string? lastName
         );
     }
 }

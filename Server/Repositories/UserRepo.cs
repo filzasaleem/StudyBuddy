@@ -12,6 +12,11 @@ namespace Server.Repositories
     {
         private readonly StudyBiddyDbContext _context;
 
+        public UserRepo(StudyBiddyDbContext context)
+        {
+            _context = context;
+        }
+
         public async Task<User> CreateUserAsync(User user)
         {
             await _context.AddAsync(user);

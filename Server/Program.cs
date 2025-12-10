@@ -18,44 +18,65 @@ builder.Services.AddDbContext<StudyBiddyDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder
+    .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Authority = builder.Configuration["Clerk:Issuer"];
+        options.Audience = builder.Configuration["Clerk:Audience"];
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["Clerk:Issuer"],
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["Clerk:Audience"],
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            NameClaimType = "sub",
+        };
+
+        // Log token validation
+        options.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = context =>
+            {
+                Console.WriteLine($"Authentication failed: {context.Exception.Message}");
+                return Task.CompletedTask;
+            },
+            OnTokenValidated = context =>
+            {
+                Console.WriteLine("Token validated successfully");
+                return Task.CompletedTask;
+            },
+        };
+    });
+
+// builder.Services.AddCors(options =>
+// {
+//     options.AddPolicy(
+//         "AllowFrontend",
+//         policy =>
+//         {
+//             policy
+//                 .WithOrigins(
+//                     "http://localhost:5173", // Vite frontend
+//                     "http://localhost:3000" // Any other local frontend
+//                 )
+//                 .AllowAnyHeader()
+//                 .AllowAnyMethod()
+//                 .AllowCredentials(); // Needed for Clerk
+//         }
+//     );
+// });
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(
-        "AllowFrontend",
-        policy =>
-        {
-            policy
-                .WithOrigins(
-                    "http://localhost:5173", // Vite frontend
-                    "http://localhost:3000" // Any other local frontend
-                )
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowCredentials(); // Needed for Clerk
-        }
-    );
+    options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 });
-
-// 1. Add Clerk authentication
-
-builder.Services.AddClerkApiClient(config =>
-{
-    config.SecretKey = builder.Configuration["Clerk:SecretKey"]!;
-});
-
-// 2. Add clerk JWT authentication
-builder
-    .Services.AddAuthentication(ClerkAuthenticationDefaults.AuthenticationScheme)
-    .AddClerkAuthentication(options =>
-    {
-        options.Authority = builder.Configuration["Clerk:Domain"];
-        options.AuthorizedParty = builder.Configuration["Clerk:Audience"];
-    });
 
 // Add services
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
-
 
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
@@ -71,7 +92,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors("AllowFrontend");
+
+// app.UseCors("AllowFrontend");
+app.UseCors();
 
 // Authentication + Authorization **MUST** be added
 app.UseAuthentication();
