@@ -6,12 +6,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server;
+using Server.Data;
 
 #nullable disable
 
 namespace Server.Migrations
 {
-    [DbContext(typeof(StudyBiddyDbContext))]
+    [DbContext(typeof(StudyBuddyDbContext))]
     [Migration("20251201100843_initialmigrations")]
     partial class initialmigrations
     {
