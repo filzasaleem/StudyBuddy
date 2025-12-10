@@ -12,9 +12,9 @@ namespace Server.Repositories
 {
     public class UserRepo : IUserRepo
     {
-        private readonly StudyBiddyDbContext _context;
+        private readonly StudyBuddyDbContext _context;
 
-        public UserRepo(StudyBiddyDbContext context)
+        public UserRepo(StudyBuddyDbContext context)
         {
             _context = context;
         }
