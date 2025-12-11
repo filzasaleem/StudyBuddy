@@ -85,6 +85,8 @@ builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEventRepo, EventRepo>();
 builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IStudyBuddyRepo, StudyBuddyRepo>();
+builder.Services.AddScoped<IStudyBuddyService, StudyBuddyService>();
 
 builder.Services.AddAuthorization();
 

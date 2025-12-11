@@ -5,6 +5,6 @@ namespace Server.DTOs
         string Initials,
         string FullName,
         bool IsOnline,
-        string Subjects
+        string Subject
     );
 }
