@@ -28,8 +28,6 @@ namespace Server.Services
         )
         {
             var user = await _repo.GetUserByClerkIdAsync(clerkUserId);
-            Console.WriteLine("__________INSIDE THE USER SERVICE__________");
-            Console.WriteLine("_____user: " + user);
             if (user == null)
             {
                 user = await _repo.CreateUserAsync(
@@ -45,5 +43,24 @@ namespace Server.Services
             return _mapper.Map<UserResponse>(user);
         }
 
+        public async Task<UserResponse> UpdateUserAsync(
+            string clerkUserId,
+            UserUpdateRequest request
+        )
+        {
+            var user = await _repo.GetUserByClerkIdAsync(clerkUserId);
+
+            if (user == null)
+                throw new Exception("User not found");
+
+            var updatedUser = await _repo.UpdateUserAsync(
+                user.Id,
+                request.FirstName,
+                request.LastName,
+                request.Email
+            );
+
+            return _mapper.Map<UserResponse>(updatedUser);
+        }
     }
 }

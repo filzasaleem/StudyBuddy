@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Server.DTOs;
 using Server.Services;
+using Servr.Models;
 
 namespace Server.Controllers
 {
@@ -39,7 +40,7 @@ namespace Server.Controllers
             Console.WriteLine("Last Name is: " + lastName);
             Console.WriteLine("****************");
 
-            if (clerkUserId == null )
+            if (clerkUserId == null)
                 return Unauthorized();
             UserResponse user = await _services.GetOrCreateUserAsync(
                 clerkUserId,
@@ -50,6 +51,20 @@ namespace Server.Controllers
             Console.WriteLine("***********************USER***************");
             Console.WriteLine(user);
             return Ok(user);
+        }
+
+        [HttpPut("me")]
+        [Authorize]
+        public async Task<IActionResult> UpdateCurrentUser([FromBody] UserUpdateRequest request)
+        {
+            var clerkUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (clerkUserId == null)
+                return Unauthorized();
+
+            var updatedUser = await _services.UpdateUserAsync(clerkUserId, request);
+
+            return Ok(updatedUser);
         }
 
         [Authorize]

@@ -32,5 +32,31 @@ namespace Server.Repositories
                 user.ClerkUserId == clerkUserId
             );
         }
+
+        public async Task<User> UpdateUserAsync(
+            Guid id,
+            string? firstName,
+            string? lastName,
+            string? email
+        )
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+                throw new Exception("User not found");
+
+            if (!string.IsNullOrWhiteSpace(firstName))
+                user.FirstName = firstName;
+
+            if (!string.IsNullOrWhiteSpace(lastName))
+                user.LastName = lastName;
+
+            if (!string.IsNullOrWhiteSpace(email))
+                user.Email = email;
+
+            await _context.SaveChangesAsync();
+
+            return user;
+        }
     }
 }

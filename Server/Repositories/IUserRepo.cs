@@ -12,5 +12,11 @@ namespace Server.Repositories
     {
         public Task<User?> GetUserByClerkIdAsync(string clerkUserId);
         public Task<User> CreateUserAsync(User user);
+        public Task<User> UpdateUserAsync(
+            Guid id,
+            string? firstName,
+            string? lastName,
+            string? email
+        );
     }
 }

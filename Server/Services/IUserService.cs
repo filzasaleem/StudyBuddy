@@ -14,5 +14,6 @@ namespace Server.Services
             string? firstName,
             string? lastName
         );
+        Task<UserResponse> UpdateUserAsync(string clerkUserId, UserUpdateRequest request);
     }
 }
