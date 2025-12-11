@@ -19,6 +19,16 @@ namespace Server.Repositories
             _context = context;
         }
 
+        public async Task UpdateLastActiveAsync(Guid userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+                return;
+
+            user.LastActiveAt = DateTimeOffset.UtcNow;
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<User> CreateUserAsync(User user)
         {
             await _context.AddAsync(user);

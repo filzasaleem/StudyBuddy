@@ -8,5 +8,7 @@ public class User
     public string? LastName { get; set; }
     public string? Email { get; set; }
     public DateTime CreatedAt { get; set; }
+    public DateTimeOffset LastActiveAt { get; set; } = DateTimeOffset.UtcNow;
+
     public List<Event> Events { get; set; } = new();
 }

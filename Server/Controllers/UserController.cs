@@ -13,6 +13,7 @@ namespace Server.Controllers
 {
     [ApiController]
     [Route("api/user")]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserService _services;
@@ -23,7 +24,6 @@ namespace Server.Controllers
         }
 
         [HttpGet("me")]
-        [Authorize]
         public async Task<IActionResult> GetCurrentUser()
         {
             Console.WriteLine("*************Inside Controller********");
@@ -54,7 +54,6 @@ namespace Server.Controllers
         }
 
         [HttpPut("me")]
-        [Authorize]
         public async Task<IActionResult> UpdateCurrentUser([FromBody] UserUpdateRequest request)
         {
             var clerkUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -67,7 +66,19 @@ namespace Server.Controllers
             return Ok(updatedUser);
         }
 
-        [Authorize]
+        [HttpPost("ping")]
+        public async Task<IActionResult> Ping()
+        {
+            var clerkUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (clerkUserId == null)
+                return Unauthorized();
+
+
+            await _services.TouchAsync(clerkUserId);
+
+            return Ok(new { status = "updated" });
+        }
+
         [HttpGet("test")]
         public IActionResult Test()
         {

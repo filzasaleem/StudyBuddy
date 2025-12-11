@@ -31,7 +31,7 @@ namespace Server.Services
                     {
                         var card = _mapper.Map<StudyBuddyCardResponse>(u);
                         card.Subject = e.Title;
-                        card.IsOnline = false;
+                        card.Description = e.Description;
                         return card;
                     })
                 )
@@ -50,7 +50,7 @@ namespace Server.Services
                 {
                     var card = _mapper.Map<StudyBuddyCardResponse>(user);
                     card.Subject = e.Title;
-                    card.IsOnline = false;
+                    card.Description = e.Description;
                     return card;
                 })
                 .ToList();

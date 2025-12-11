@@ -9,5 +9,6 @@ namespace Server.DTOs
         public string FullName { get; set; } = "";
         public bool IsOnline { get; set; } = false;
         public string Subject { get; set; } = "";
+        public string? Description { get; set; } = "";
     }
 }

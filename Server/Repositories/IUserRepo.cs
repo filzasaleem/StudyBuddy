@@ -10,6 +10,7 @@ namespace Server.Repositories
 {
     public interface IUserRepo
     {
+        public Task UpdateLastActiveAsync(Guid userId);
         public Task<User?> GetUserByClerkIdAsync(string clerkUserId);
         public Task<User> CreateUserAsync(User user);
         public Task<User> UpdateUserAsync(

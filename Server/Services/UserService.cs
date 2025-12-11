@@ -20,6 +20,15 @@ namespace Server.Services
             _mapper = mapper;
         }
 
+        public async Task TouchAsync(string clerkUserId)
+        {
+            var user = await _repo.GetUserByClerkIdAsync(clerkUserId);
+
+            if (user == null)
+                throw new Exception("User not found");
+            await _repo.UpdateLastActiveAsync(user.Id);
+        }
+
         public async Task<UserResponse> GetOrCreateUserAsync(
             string clerkUserId,
             string? email,

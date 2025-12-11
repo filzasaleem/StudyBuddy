@@ -28,8 +28,13 @@ namespace Server.Mapping
                             + $"{(src.LastName.Length > 0 ? src.LastName[0] : ' ')}".ToUpper()
                         )
                 )
-                .ForMember(dest => dest.Subject, opt => opt.Ignore()) 
-                .ForMember(dest => dest.IsOnline, opt => opt.Ignore());
+                .ForMember(dest => dest.Subject, opt => opt.Ignore())
+                .ForMember(dest => dest.Description, opt => opt.Ignore())
+                .ForMember(
+                    dest => dest.IsOnline,
+                    opt =>
+                        opt.MapFrom(src => src.LastActiveAt > DateTimeOffset.UtcNow.AddMinutes(-4))
+                );
         }
     }
 }
