@@ -22,8 +22,10 @@ namespace Server.Services
         public async Task<List<StudyBuddyCardResponse>> GetAllCardsAsync()
         {
             var users = await _repo.GetAllUsersWithEventsAsync();
-
+            if (users == null)
+                return new List<StudyBuddyCardResponse>();
             var cards = users
+                .Where(u => u.Events != null && u.Events.Any()) // skip users with no subjects
                 .SelectMany(u =>
                     u.Events.Select(e =>
                     {
@@ -41,9 +43,8 @@ namespace Server.Services
         public async Task<List<StudyBuddyCardResponse>> GetCardsByUserIdAsync(Guid userId)
         {
             var user = await _repo.GetUserWithEventsByIdAsync(userId);
-            if (user == null)
+            if (user == null || user.Events == null || !user.Events.Any())
                 return new List<StudyBuddyCardResponse>();
-
             var cards = user
                 .Events.Select(e =>
                 {

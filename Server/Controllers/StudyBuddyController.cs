@@ -22,6 +22,7 @@ namespace Server.Controllers
         [HttpGet]
         public async Task<ActionResult<List<StudyBuddyCardResponse>>> GetAllCards()
         {
+            Console.WriteLine("*****************STUDY BUDDY CONTROLLER***************");
             var cards = await _service.GetAllCardsAsync();
             return Ok(cards);
         }

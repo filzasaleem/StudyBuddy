@@ -28,11 +28,8 @@ namespace Server.Mapping
                             + $"{(src.LastName.Length > 0 ? src.LastName[0] : ' ')}".ToUpper()
                         )
                 )
-                .ForMember(dest => dest.Subject, opt => opt.Ignore()) // set manually
+                .ForMember(dest => dest.Subject, opt => opt.Ignore()) 
                 .ForMember(dest => dest.IsOnline, opt => opt.Ignore());
-
-            CreateMap<Event, StudyBuddyCardResponse>()
-                .ForMember(dest => dest.Subject, opt => opt.MapFrom(src => src.Title));
         }
     }
 }
