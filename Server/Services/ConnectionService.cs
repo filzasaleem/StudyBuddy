@@ -39,18 +39,19 @@ public class ConnectionService(IConnectionRepo repo) : IConnectionService
 
         switch (action)
         {
+            case "accepted":
             case "accept":
                 connection.Status = ConnectionStatus.Accepted;
                 break;
 
+            case "rejected":
             case "reject":
             case "decline":
                 connection.Status = ConnectionStatus.Rejected;
                 break;
 
             default:
-                connection.Status = ConnectionStatus.Pending;
-                break;
+                throw new Exception("Invalid status");
         }
 
         await _repo.UpdateAsync(connection);
