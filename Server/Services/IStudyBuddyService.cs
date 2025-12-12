@@ -8,7 +8,7 @@ namespace Server.Services
 {
     public interface IStudyBuddyService
     {
-        Task<List<StudyBuddyCardResponse>> GetAllCardsAsync();
+        Task<List<StudyBuddyCardResponse>> GetAllCardsAsync(string? search);
         Task<List<StudyBuddyCardResponse>> GetCardsByUserIdAsync(Guid userId);
     }
 }

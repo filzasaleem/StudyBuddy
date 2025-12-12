@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Server.DTOs;
 using Server.Services;
@@ -10,6 +11,7 @@ namespace Server.Controllers
 {
     [ApiController]
     [Route("api/studybuddy")]
+    [Authorize]
     public class StudyBuddyController : ControllerBase
     {
         private readonly IStudyBuddyService _service;
@@ -20,11 +22,22 @@ namespace Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<StudyBuddyCardResponse>>> GetAllCards()
+        public async Task<ActionResult<List<StudyBuddyCardResponse>>> GetAllCards(
+            [FromQuery] string? q
+        )
         {
             Console.WriteLine("*****************STUDY BUDDY CONTROLLER***************");
-            var cards = await _service.GetAllCardsAsync();
-            return Ok(cards);
+            Console.WriteLine("SEARCH QUERY: " + q);
+            try
+            {
+                var cards = await _service.GetAllCardsAsync(q);
+                return Ok(cards);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Internal Server Error");
+            }
         }
 
         [HttpGet("{userId}")]

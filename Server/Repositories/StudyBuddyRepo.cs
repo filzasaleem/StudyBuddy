@@ -17,11 +17,34 @@ namespace Server.Repositories
             _context = context;
         }
 
-        public async Task<List<User>> GetAllUsersWithEventsAsync()
+        public async Task<List<User>> GetAllUsersWithEventsAsync(string? search)
         {
-            return await _context
-                .Users.Include(u => u.Events) // eager load events
-                .ToListAsync();
+            var query = _context.Users.Include(u => u.Events).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.ToLower();
+
+                query = query
+                    .Select(u => new
+                    {
+                        User = u,
+                        ExactMatch = u.Events.Any(e =>
+                            (e.Title != null && e.Title.ToLower() == search)
+                            || (e.Description != null && e.Description.ToLower() == search)
+                        ),
+                        PartialMatch = u.Events.Any(e =>
+                            (e.Title != null && e.Title.ToLower().Contains(search))
+                            || (e.Description != null && e.Description.ToLower().Contains(search))
+                        ),
+                    })
+                    .Where(x => x.ExactMatch || x.PartialMatch)
+                    .OrderByDescending(x => x.ExactMatch) // exact matches first
+                    .ThenByDescending(x => x.PartialMatch) // then partial matches
+                    .Select(x => x.User);
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task<User?> GetUserWithEventsByIdAsync(Guid userId)

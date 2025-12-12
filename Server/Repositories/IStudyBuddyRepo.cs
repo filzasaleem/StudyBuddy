@@ -8,7 +8,7 @@ namespace Server.Repositories
 {
     public interface IStudyBuddyRepo
     {
-        Task<List<User>> GetAllUsersWithEventsAsync();
+        Task<List<User>> GetAllUsersWithEventsAsync(string search);
         Task<User?> GetUserWithEventsByIdAsync(Guid userId);
     }
 }

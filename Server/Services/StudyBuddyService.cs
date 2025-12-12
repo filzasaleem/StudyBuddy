@@ -19,21 +19,35 @@ namespace Server.Services
             _mapper = mapper;
         }
 
-        public async Task<List<StudyBuddyCardResponse>> GetAllCardsAsync()
+        public async Task<List<StudyBuddyCardResponse>> GetAllCardsAsync(string? search)
         {
-            var users = await _repo.GetAllUsersWithEventsAsync();
+            var users = await _repo.GetAllUsersWithEventsAsync(search);
             if (users == null)
                 return new List<StudyBuddyCardResponse>();
+            search = search?.ToLower();
             var cards = users
-                .Where(u => u.Events != null && u.Events.Any()) // skip users with no subjects
+                .Where(u => u.Events != null && u.Events.Any())
                 .SelectMany(u =>
                     u.Events.Select(e =>
-                    {
-                        var card = _mapper.Map<StudyBuddyCardResponse>(u);
-                        card.Subject = e.Title;
-                        card.Description = e.Description;
-                        return card;
-                    })
+                        {
+                            var card = _mapper.Map<StudyBuddyCardResponse>(u);
+                            card.Subject = e.Title;
+                            card.Description = e.Description;
+                            return new
+                            {
+                                Card = card,
+                                IsExact = !string.IsNullOrWhiteSpace(search)
+                                    && (
+                                        (e.Title != null && e.Title.ToLower() == search)
+                                        || (
+                                            e.Description != null
+                                            && e.Description.ToLower() == search
+                                        )
+                                    ),
+                            };
+                        })
+                        .OrderByDescending(x => x.IsExact) // exact match events first
+                        .Select(x => x.Card)
                 )
                 .ToList();
 
