@@ -48,20 +48,25 @@ public class ConnectionsController : ControllerBase
         return Ok(pending);
     }
 
-    // Optional: Get all notifications for a user (just pending connections for now)
     [HttpGet("notifications/{userId}")]
     public async Task<IActionResult> GetNotifications(Guid userId)
     {
-        // Currently, we treat pending connections as notifications
         var pending = await _service.GetPendingRequestsAsync(userId);
 
-        // Map to a simple notification DTO
         var notifications = pending.Select(c => new
         {
-            Message = $"You have a new connection request from user {c.SenderId}",
+            Message = $"You have a new connection request from { "Unknown"} ({ "Unknown"})",
             ConnectionId = c.Id,
         });
 
         return Ok(notifications);
     }
+
+    // [HttpGet("buddies/{userId}")]
+    // public async Task<IActionResult> GetBuddies(Guid userId)
+    // {
+    //     var buddies = await _service.GetAcceptedConnectionsAsync(userId);
+
+    //     return Ok(buddies);
+    // }
 }
