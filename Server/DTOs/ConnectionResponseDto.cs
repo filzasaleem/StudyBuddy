@@ -8,6 +8,6 @@ namespace Server.DTOs
 {
     public class ConnectionResponseDto
     {
-        public ConnectionStatus Status { get; set; }
+        public string Status { get; set; }
     }
 }

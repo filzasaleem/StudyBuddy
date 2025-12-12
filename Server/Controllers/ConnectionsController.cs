@@ -35,9 +35,8 @@ public class ConnectionsController : ControllerBase
     [HttpPost("{id}/respond")]
     public async Task<IActionResult> RespondRequest(Guid id, [FromBody] ConnectionResponseDto dto)
     {
-        var connection = await _service.RespondRequestAsync(id, dto.Status);
+        var connection = await _service.RespondRequestAsync(id, dto);
 
-        // No SignalR notification; frontend will refresh by polling
         return Ok(connection);
     }
 
@@ -60,7 +59,7 @@ public class ConnectionsController : ControllerBase
         var notifications = pending.Select(c => new
         {
             Message = $"You have a new connection request from user {c.SenderId}",
-            ConnectionId = c.Id
+            ConnectionId = c.Id,
         });
 
         return Ok(notifications);
