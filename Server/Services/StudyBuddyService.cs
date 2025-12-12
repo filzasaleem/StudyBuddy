@@ -21,34 +21,54 @@ namespace Server.Services
 
         public async Task<List<StudyBuddyCardResponse>> GetAllCardsAsync(string? search)
         {
-            var users = await _repo.GetAllUsersWithEventsAsync(search);
+            var users = await _repo.GetAllUsersWithEventsAsync();
             if (users == null)
                 return new List<StudyBuddyCardResponse>();
-            search = search?.ToLower();
+
+            search = search?.ToLower().Trim();
+
             var cards = users
                 .Where(u => u.Events != null && u.Events.Any())
                 .SelectMany(u =>
                     u.Events.Select(e =>
+                    {
+                        var card = _mapper.Map<StudyBuddyCardResponse>(u);
+                        card.Subject = e.Title;
+                        card.Description = e.Description;
+
+                        // Calculate score
+                        int score = 0;
+                        if (!string.IsNullOrWhiteSpace(search))
                         {
-                            var card = _mapper.Map<StudyBuddyCardResponse>(u);
-                            card.Subject = e.Title;
-                            card.Description = e.Description;
-                            return new
+                            if (!string.IsNullOrEmpty(e.Title))
                             {
-                                Card = card,
-                                IsExact = !string.IsNullOrWhiteSpace(search)
-                                    && (
-                                        (e.Title != null && e.Title.ToLower() == search)
-                                        || (
-                                            e.Description != null
-                                            && e.Description.ToLower() == search
-                                        )
-                                    ),
-                            };
-                        })
-                        .OrderByDescending(x => x.IsExact) // exact match events first
-                        .Select(x => x.Card)
+                                var titleLower = e.Title.ToLower() ?? "";
+                                if (titleLower == search)
+                                    score += 100;
+                                else if (titleLower.StartsWith(search))
+                                    score += 50;
+                                else if (titleLower.Contains(search))
+                                    score += 10;
+                            }
+
+                            if (!string.IsNullOrEmpty(e.Description))
+                            {
+                                var descLower = e.Description.ToLower() ?? "";
+                                if (descLower == search)
+                                    score += 100;
+                                else if (descLower.StartsWith(search))
+                                    score += 50;
+                                else if (descLower.Contains(search))
+                                    score += 10;
+                            }
+                        }
+
+                        return new { Card = card, Score = score };
+                    })
                 )
+                .Where(x => x.Score > 0 || string.IsNullOrWhiteSpace(search)) // filter only matches, or include all if no search
+                .OrderByDescending(x => x.Score) // exact -> startsWith -> contains
+                .Select(x => x.Card)
                 .ToList();
 
             return cards;
