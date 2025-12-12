@@ -28,11 +28,11 @@ namespace Server.Controllers
         {
             Console.WriteLine("*************Inside Controller********");
             var clerkUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (clerkUserId == null)
+                return Unauthorized();
             var email = User.FindFirst("email")?.Value;
             var firstName = User.FindFirst("firstName")?.Value;
             var lastName = User.FindFirst("lastName")?.Value;
-            if (clerkUserId == null)
-                return Unauthorized();
             UserResponse user = await _services.GetOrCreateUserAsync(
                 clerkUserId,
                 email,
