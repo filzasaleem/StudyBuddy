@@ -63,6 +63,7 @@ namespace Server.Repositories
 
             if (!string.IsNullOrWhiteSpace(email))
                 user.Email = email;
+            user.LastActiveAt = DateTimeOffset.UtcNow;
 
             await _context.SaveChangesAsync();
 

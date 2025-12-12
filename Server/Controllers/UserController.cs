@@ -31,15 +31,6 @@ namespace Server.Controllers
             var email = User.FindFirst("email")?.Value;
             var firstName = User.FindFirst("firstName")?.Value;
             var lastName = User.FindFirst("lastName")?.Value;
-            Console.WriteLine("clerk id is: " + clerkUserId);
-            Console.WriteLine("****************");
-            Console.WriteLine("Email is: " + email);
-            Console.WriteLine("****************");
-            Console.WriteLine("FirstName is: " + firstName);
-            Console.WriteLine("****************");
-            Console.WriteLine("Last Name is: " + lastName);
-            Console.WriteLine("****************");
-
             if (clerkUserId == null)
                 return Unauthorized();
             UserResponse user = await _services.GetOrCreateUserAsync(
@@ -48,8 +39,7 @@ namespace Server.Controllers
                 firstName,
                 lastName
             );
-            Console.WriteLine("***********************USER***************");
-            Console.WriteLine(user);
+
             return Ok(user);
         }
 
@@ -69,10 +59,10 @@ namespace Server.Controllers
         [HttpPost("ping")]
         public async Task<IActionResult> Ping()
         {
+            Console.WriteLine("*****************PINGGGGGGGG CONTROLLER***************");
             var clerkUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (clerkUserId == null)
                 return Unauthorized();
-
 
             await _services.TouchAsync(clerkUserId);
 

@@ -33,7 +33,7 @@ namespace Server.Mapping
                 .ForMember(
                     dest => dest.IsOnline,
                     opt =>
-                        opt.MapFrom(src => src.LastActiveAt > DateTimeOffset.UtcNow.AddMinutes(-4))
+                        opt.MapFrom(src => src.LastActiveAt > DateTimeOffset.UtcNow.AddMinutes(-5))
                 );
         }
     }

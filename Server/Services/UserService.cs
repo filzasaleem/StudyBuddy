@@ -46,6 +46,7 @@ namespace Server.Services
                         Email = email,
                         FirstName = firstName,
                         LastName = lastName,
+                        LastActiveAt = DateTimeOffset.UtcNow,
                     }
                 );
             }
