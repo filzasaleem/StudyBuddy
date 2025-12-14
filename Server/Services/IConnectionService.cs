@@ -13,5 +13,7 @@ namespace Server.Services
         Task<Connection> SendRequestAsync(Guid senderId, Guid receiverId);
         Task<Connection> RespondRequestAsync(Guid connectionId, ConnectionResponseDto status);
         Task<IEnumerable<Connection>> GetPendingRequestsAsync(Guid receiverId);
+        Task<IEnumerable<NotificationDto>> GetNotificationsAsync(Guid userId);
+
     }
 }

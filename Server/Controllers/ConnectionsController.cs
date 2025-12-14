@@ -51,12 +51,12 @@ public class ConnectionsController : ControllerBase
     [HttpGet("notifications/{userId}")]
     public async Task<IActionResult> GetNotifications(Guid userId)
     {
-        var pending = await _service.GetPendingRequestsAsync(userId);
+        var notifications = await _service.GetNotificationsAsync(userId);
 
-        var notifications = pending.Select(c => new
+        var newNotification = notifications.Select(c => new
         {
-            Message = $"You have a new connection request from { "Unknown"} ({ "Unknown"})",
-            ConnectionId = c.Id,
+            Message = $"You have a new connection request from {c.SenderFirstName ?? "Unknown"} ({c.SenderLastName ?? "Unknown"})",
+            ConnectionId = c.ConnectionId,
         });
 
         return Ok(notifications);
@@ -69,4 +69,11 @@ public class ConnectionsController : ControllerBase
 
     //     return Ok(buddies);
     // }
+
+    [HttpGet("buddies/{userId}")]
+    public async Task<IActionResult> GetBuddies(Guid userId)
+    {
+        var buddies = await _service.GetNotificationsAsync(userId);
+        return Ok(buddies);
+    }
 }

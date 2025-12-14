@@ -62,4 +62,9 @@ public class ConnectionService(IConnectionRepo repo) : IConnectionService
     {
         return await _repo.GetPendingRequestsAsync(receiverId);
     }
+
+    public async Task<IEnumerable<NotificationDto>> GetNotificationsAsync(Guid userId)
+    {
+        return await _repo.GetNotificationsAsync(userId);
+    }
 }
