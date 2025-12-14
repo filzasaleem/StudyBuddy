@@ -57,4 +57,23 @@ public class ConnectionRepo : IConnectionRepo
             }
         ).ToListAsync();
     }
+
+    public async Task<IEnumerable<BuddyDto>> GetAcceptedBuddiesAsync(Guid userId)
+    {
+        return await (
+            from c in _context.Connections
+            join u in _context.Users
+                on (c.SenderId == userId ? c.ReceiverId : c.SenderId) equals u.Id
+            where
+                c.Status == ConnectionStatus.Accepted
+                && (c.SenderId == userId || c.ReceiverId == userId)
+            select new BuddyDto
+            {
+                Id = u.Id,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Email = u.Email,
+            }
+        ).ToListAsync();
+    }
 }

@@ -14,6 +14,6 @@ namespace Server.Services
         Task<Connection> RespondRequestAsync(Guid connectionId, ConnectionResponseDto status);
         Task<IEnumerable<Connection>> GetPendingRequestsAsync(Guid receiverId);
         Task<IEnumerable<NotificationDto>> GetNotificationsAsync(Guid userId);
-
+            Task<IEnumerable<BuddyDto>> GetBuddiesAsync(Guid userId);
     }
 }

@@ -62,18 +62,10 @@ public class ConnectionsController : ControllerBase
         return Ok(notifications);
     }
 
-    // [HttpGet("buddies/{userId}")]
-    // public async Task<IActionResult> GetBuddies(Guid userId)
-    // {
-    //     var buddies = await _service.GetAcceptedConnectionsAsync(userId);
-
-    //     return Ok(buddies);
-    // }
-
     [HttpGet("buddies/{userId}")]
     public async Task<IActionResult> GetBuddies(Guid userId)
     {
-        var buddies = await _service.GetNotificationsAsync(userId);
+        var buddies = await _service.GetBuddiesAsync(userId);
         return Ok(buddies);
     }
 }

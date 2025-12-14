@@ -67,4 +67,9 @@ public class ConnectionService(IConnectionRepo repo) : IConnectionService
     {
         return await _repo.GetNotificationsAsync(userId);
     }
+
+    public async Task<IEnumerable<BuddyDto>> GetBuddiesAsync(Guid userId)
+    {
+        return await _repo.GetAcceptedBuddiesAsync(userId);
+    }
 }
