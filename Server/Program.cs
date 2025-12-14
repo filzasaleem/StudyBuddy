@@ -61,14 +61,12 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy
-                .WithOrigins(
-                    "http://localhost:5173", // Vite frontend
-                    "https://blue-moss-0002e7d03.3.azurestaticapps.net" // deployedl frontend
-                    
+                .SetIsOriginAllowed(origin =>
+                    origin == "http://localhost:5173" || origin.EndsWith(".azurestaticapps.net")
                 )
                 .AllowAnyHeader()
                 .AllowAnyMethod()
-                .AllowCredentials(); // Needed for Clerk
+                .AllowCredentials();
         }
     );
 });
