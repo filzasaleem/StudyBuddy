@@ -54,27 +54,29 @@ builder
         };
     });
 
-// builder.Services.AddCors(options =>
-// {
-//     options.AddPolicy(
-//         "AllowFrontend",
-//         policy =>
-//         {
-//             policy
-//                 .WithOrigins(
-//                     "http://localhost:5173", // Vite frontend
-//                     "http://localhost:3000" // Any other local frontend
-//                 )
-//                 .AllowAnyHeader()
-//                 .AllowAnyMethod()
-//                 .AllowCredentials(); // Needed for Clerk
-//         }
-//     );
-// });
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+    options.AddPolicy(
+        "AllowFrontend",
+        policy =>
+        {
+            policy
+                .WithOrigins(
+                    "http://localhost:5173", // Vite frontend
+                    "https://blue-moss-0002e7d03.3.azurestaticapps.net" // deployedl frontend
+                    
+                )
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials(); // Needed for Clerk
+        }
+    );
 });
+
+// builder.Services.AddCors(options =>
+// {
+//     options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+// });
 
 // Add services
 builder.Services.AddControllers();
@@ -89,7 +91,6 @@ builder.Services.AddScoped<IStudyBuddyService, StudyBuddyService>();
 builder.Services.AddScoped<IConnectionRepo, ConnectionRepo>();
 builder.Services.AddScoped<IConnectionService, ConnectionService>();
 
-
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
@@ -101,8 +102,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// app.UseCors("AllowFrontend");
-app.UseCors();
+app.UseCors("AllowFrontend");
 
 // Authentication + Authorization **MUST** be added
 app.UseAuthentication();
