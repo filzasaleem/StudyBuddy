@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,18 +27,13 @@ namespace Server.Controllers
             [FromQuery] string? q
         )
         {
-            Console.WriteLine("*****************STUDY BUDDY CONTROLLER***************");
-            Console.WriteLine("SEARCH QUERY: " + q);
-            try
-            {
-                var cards = await _service.GetAllCardsAsync(q);
-                return Ok(cards);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                return StatusCode(500, "Internal Server Error");
-            }
+            var clerkUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(clerkUserId))
+                return Unauthorized();
+
+            var cards = await _service.GetAllCardsAsync(q, clerkUserId);
+            return Ok(cards);
         }
 
         [HttpGet("{userId}")]

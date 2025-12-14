@@ -19,12 +19,15 @@ namespace Server.Services
             _mapper = mapper;
         }
 
-        public async Task<List<StudyBuddyCardResponse>> GetAllCardsAsync(string? search)
+        public async Task<List<StudyBuddyCardResponse>> GetAllCardsAsync(
+            string? search,
+            string clerkUserId
+        )
         {
             var users = await _repo.GetAllUsersWithEventsAsync();
             if (users == null)
                 return new List<StudyBuddyCardResponse>();
-
+            users = users.Where(u => u.ClerkUserId != clerkUserId).ToList();
             search = search?.ToLower().Trim();
 
             var cards = users
