@@ -76,4 +76,11 @@ public class ConnectionRepo : IConnectionRepo
             }
         ).ToListAsync();
     }
+
+    public async Task<IEnumerable<Connection>> GetOutgoingPendingAsync(Guid senderId)
+    {
+        return await _context
+            .Connections.Where(c => c.SenderId == senderId && c.Status == ConnectionStatus.Pending)
+            .ToListAsync();
+    }
 }

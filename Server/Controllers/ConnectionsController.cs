@@ -62,6 +62,13 @@ public class ConnectionsController : ControllerBase
         return Ok(notifications);
     }
 
+    [HttpGet("pending/sent/{userId}")]
+    public async Task<IActionResult> GetOutgoingPending(Guid userId)
+    {
+        var sent = await _service.GetOutgoingPendingAsync(userId);
+        return Ok(sent);
+    }
+
     [HttpGet("buddies/{userId}")]
     public async Task<IActionResult> GetBuddies(Guid userId)
     {

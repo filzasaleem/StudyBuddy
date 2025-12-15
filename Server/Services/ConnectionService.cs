@@ -72,4 +72,9 @@ public class ConnectionService(IConnectionRepo repo) : IConnectionService
     {
         return await _repo.GetAcceptedBuddiesAsync(userId);
     }
+
+    public async Task<IEnumerable<Connection>> GetOutgoingPendingAsync(Guid senderId)
+    {
+        return await _repo.GetOutgoingPendingAsync(senderId);
+    }
 }

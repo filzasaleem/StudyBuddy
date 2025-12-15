@@ -15,5 +15,6 @@ namespace Server.Repositories
         Task UpdateAsync(Connection connection);
         Task<IEnumerable<NotificationDto>> GetNotificationsAsync(Guid receiverId);
         Task<IEnumerable<BuddyDto>> GetAcceptedBuddiesAsync(Guid receiverId);
+        Task<IEnumerable<Connection>> GetOutgoingPendingAsync(Guid senderId);
     }
 }
