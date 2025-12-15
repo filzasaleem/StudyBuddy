@@ -27,20 +27,27 @@ namespace Server.Controllers
         public async Task<IActionResult> GetCurrentUser()
         {
             Console.WriteLine("*************Inside Controller********");
-            var clerkUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (clerkUserId == null)
-                return Unauthorized();
-            var email = User.FindFirst("email")?.Value;
-            var firstName = User.FindFirst("firstName")?.Value;
-            var lastName = User.FindFirst("lastName")?.Value;
-            UserResponse user = await _services.GetOrCreateUserAsync(
-                clerkUserId,
-                email,
-                firstName,
-                lastName
-            );
+            try
+            {
+                var clerkUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (clerkUserId == null)
+                    return Unauthorized();
+                var email = User.FindFirst("email")?.Value;
+                var firstName = User.FindFirst("firstName")?.Value;
+                var lastName = User.FindFirst("lastName")?.Value;
+                UserResponse user = await _services.GetOrCreateUserAsync(
+                    clerkUserId,
+                    email,
+                    firstName,
+                    lastName
+                );
 
-            return Ok(user);
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPut("me")]
